@@ -1500,7 +1500,7 @@ newsols, ls, var, hypsol, isempty, hyp, minors, gendeg, _pol;
   sineq:=subs(spt, Inequations):
 
   if nops(vars) = nops(Equations) then 
-    if member(-1, map(sign, map(_pol-> if degree(_pol)<=0 then _pol fi, pos))) then 
+    if member(-1, map(sign, map(_pol-> if degree(_pol)<=0 then _pol fi, spos))) then 
       return [];
     end if;
     sols := MSolveRealRoots(Equations, vars, [op(spos), op(sineq)],
