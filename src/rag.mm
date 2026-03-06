@@ -1126,7 +1126,39 @@ local i, Families, Fam, sols, a, b;
 end proc:
 
 UnivariateSolveFamily:=proc(Equations, Fam, Inequalities, Inequations, vars)
-local upol, f, uroots, i, sq, sols, newpol, p, mid;
+local g, upol, f, uroots, i, sq, sols, q, newpol, p, mid;
+  g:=0:
+  for i from 1 to nops(Equations) do 
+    g:=gcd(g, Equations[i]):
+  end do;
+  if degree(g)=0 then return []; end if;
+
+  for i  from 1 to nops(Inequalities) do
+    q:=gcd(g, Inequalities[i]):
+    if degree(q)>0 then
+      g:=numer(normal(g/q)):
+    end if;
+  end do;
+  if degree(g)=0 then return []; end if;
+
+  for i  from 1 to nops(Inequations) do
+    q:=gcd(g, Inequations[i]):
+    if degree(q)>0 then
+      g:=numer(normal(g/q)):
+    end if;
+    g:=gcd(g, Inequations[i]):
+  end do;
+  if degree(g)=0 then return []; end if;
+
+  #Now, we search for real roots of g which satisfy the constraints.
+  if degree(g) > 0 then 
+    sols:=MSolveRealRoots([g], [op(indets(g))], [op(Inequalities),
+                          op(Inequations)]):
+    sols:=AdmissibleSolutions(sols, nops(Inequalities)):
+    return sols;
+  end if;
+
+  #Case where g = 0
   upol:=mul(f, f in Fam):
   for i from 1 to nops(Equations) do 
     upol:=gcd(upol, Equations[i]):
