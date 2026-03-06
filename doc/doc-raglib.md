@@ -1,21 +1,47 @@
+# Deciding the existence of solutions
 
-
-*SemiAlgebraicSolve*(eqs, positive, nonzero, opts)
+*HasRealSolutions*(eqs, positive, nonzero, opts)
 where 
 - eqs, positive and nonzero are lists of polynomials with rational
   coefficients
     - eqs stands for _equations_
     - positive stands for _positivity contraints_
     - nonzer stands for _non-vanishing constraints_
-- opts is a set indicating some options
+- opts is a set indicating some options (this is an optional argument)
 
-SemiAlgebraicSolve computes at least one point in each connected
+*HasRealSolutions* decides if the semi-algebraic set defined by 
+- the vanishing of all polynomials in eqs,
+- the positivity of all polynomials in positive,
+- the non-vanishing of all polynomials in nonzero
+is empty or not. 
+
+In case of emptiness, it returns an empty list,
+otherwise it returns a list of witness points of non-emptiness.
+
+Each such point is given by an isolating box.
+
+# Computing at least one point per connected component
+
+*PointsPerComponents*(eqs, positive, nonzero, opts)
+where 
+- eqs, positive and nonzero are lists of polynomials with rational
+  coefficients
+    - eqs stands for _equations_
+    - positive stands for _positivity contraints_
+    - nonzer stands for _non-vanishing constraints_
+- opts is a set indicating some options (this is an optional argument)
+
+*PointsPerComponents* computes at least one point in each connected
 component of the semi-algebraic set defined by 
 - the vanishing of all polynomials in eqs,
 - the positivity of all polynomials in positive,
 - the non-vanishing of all polynomials in nonzero.
 
+It returns a list of points meeting all connected components of the
+semi-algebraic set under study.  
 Each such point is given by an isolating box.
+
+# Dependency
 
 SemiAlgebraicSolve requires the [msolve](https://msolve.lip6.fr)
 library to be installed with its interface to Maple. See
@@ -24,31 +50,9 @@ library to be installed with its interface to Maple. See
 [https://github.com/algebraic-solving/msolve](https://github.com/algebraic-solving/msolve)
 for its source code and installation instructions.
 
+# Options
 
 Possible options are: 
-- "isempty"=INT (default value is 0). 
-
-  When INT is set to 1, SemiAlgebraicSolve will decide whether the
-  semi-algebraic algebraic set defined by its input is empty or not.
-  In case, it is not empty, it will return a witness point of
-  non-emptiness. 
-
-  It is recommended to use this option if deciding the emptiness of
-  some semi-algebraic set is the goal of the computation (computing
-  sample points in each connected component is usually more
-  expensive). 
-
-- "isbounded"=INT (default value is 0)
-
-  When it is known in advance that the semi-algebraic under study is
-  bounded (for instance because some inequalities define a box or a
-  ball), setting INT is set to 1, will activate a dedicated
-  algorithm that take advantage of this information (and is usually
-  faster than more general purpose algorithms). 
-
-  This option must be used with care. It should not be used if there
-  is a doubt on the boundedness of the semi-algebraic set under
-  study. 
 
 - "verb"=INT (default value is 0)
 
@@ -67,4 +71,16 @@ Possible options are:
   This option tells msolve how many threads it can use. At the
   moment, RAGlib does not support multi-threading; this is delegated
   to msolve computations.
+
+- "isbounded"=INT (default value is 0)
+
+  When it is known in advance that the semi-algebraic under study is
+  bounded (for instance because some inequalities define a box or a
+  ball), setting INT is set to 1, will activate a dedicated
+  algorithm that take advantage of this information (and is usually
+  faster than more general purpose algorithms). 
+
+  This option must be used with care. It should not be used if there
+  is a doubt on the boundedness of the semi-algebraic set under
+  study. 
 
