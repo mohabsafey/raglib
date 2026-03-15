@@ -400,25 +400,22 @@ end proc:
 
 
 CoeffDeform_eps:=proc(eqs, F, vars, eps, cstr, opts:={})
-local rr, gb, hs, deg, rag_hilb_var, i, gb0, dim, newlc, lc, k, allvars:
+local rr, gb, rag_hilb_var, i, gb0, sat_var, newlc, lc, k, allvars:
   rr:=rand(1..2^30):
-  allvars:=[op(vars), eps]:
-  gb0:=MSolveGroebnerLM([op(eqs), seq(F[i]+rr()*eps, i=1..nops(F))], 0, allvars, 
+  allvars:=[sat_var, op(vars), eps]:
+  gb0:=MSolveGroebnerLM([sat_var*eps-1, 
+                        op(eqs), seq(F[i]+rr()*eps, i=1..nops(F))], 0, allvars, 
             opts union {"linalg"=42}):
-  hs    := Groebner:-HilbertSeries(gb0, allvars, rag_hilb_var);
-  deg   := subs(rag_hilb_var=1, numer(hs)):
-  dim   := degree(denom(hs));
   lc:=[[seq(1, i=1..nops(F))]]:
   while true do 
     for k from 1 to nops(lc) do 
-      gb:=MSolveGroebnerLM([op(eqs), 
+      gb:=MSolveGroebnerLM([sat_var*eps-1, op(eqs), 
               seq(F[i]+lc[k][i]*eps, i=1..nops(F))], 0, allvars, 
               opts union {"linalg"=42}):
-      hs    := Groebner:-HilbertSeries(gb, allvars, rag_hilb_var);
       if gb=gb0 then 
-        if HaveFiniteIntersections([op(eqs), 
+        if HaveFiniteIntersections([sat_var*eps-1, op(eqs), 
                                     seq(F[i]+lc[k][i]*eps, i=1..nops(F))], 
-                                    cstr, [op(vars), eps], opts) then 
+                                    cstr, allvars, opts) then 
           return lc[k];
         end if;
       end if;
