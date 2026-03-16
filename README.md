@@ -103,4 +103,4 @@ whose numerical approximation is
     dimension of real algebraic sets or semi-algebraic sets, one-block
     quantifier elimination and roadmap computations for answering
     connectivity queries. 
-- A translation of `RAGlib` in [`AlgebraicSolving.jl`](https://algebraic-solving.github.io/) will be hopefully started soon (see also [https://github.com/algebraic-solving/AlgebraicSolving.jl](https://github.com/algebraic-solving/AlgebraicSolving.jl). 
+- A translation of `RAGlib` in [`AlgebraicSolving.jl`](https://algebraic-solving.github.io/) will be hopefully started soon (see also [https://github.com/algebraic-solving/AlgebraicSolving.jl](https://github.com/algebraic-solving/AlgebraicSolving.jl)). 
