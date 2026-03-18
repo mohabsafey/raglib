@@ -1423,8 +1423,6 @@ local gb, sols;
   gb:=SaturateIntersect(sys, ld[1], ld, [op(vars), eps], opts):
   sols:=MSolveRealRoots([op(gb), op(sys), ld[1]], [op(vars), eps],
         [op(Inequalities), eps, op(Inequations)], opts):
-  #sols:=AdmissibleSolutions(sols, nops(Inequalities)):
-  #sols:=map(_p->map(_c->if member(lhs(_c), vars) then _c fi, _p), sols):
   return sols;
 end proc:
 
@@ -1536,6 +1534,9 @@ local verb, isbounded, eps, lsys, emin, delta, J, i, j, sols, lsols, maxdeg, sol
       if sols[1]>0 then 
         sols:=DegenerateDeformedSystem(lsys[i], delta, Inequalities,
               Inequations, vars, eps, opts):
+        if sols[1]>0 then 
+          lprint(args);
+          error "Bug in ZeroDimBoundaries (1)";
       end if;
       if nops(FamPositive)>0 then 
         sols:=AdmissibleSolutions(sols, nops(Inequalities)+1);
